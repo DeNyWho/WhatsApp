@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WhatsAppCloneTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -125,7 +124,7 @@ fun WhatsAppTab () {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Tabs (pagerState: PagerState) {
-    var list = listOf ("CHATS","STATUS","CALLS")
+    val list = listOf ("CHATS","STATUS","CALLS")
     val scope = rememberCoroutineScope ()
     
     TabRow(
@@ -144,7 +143,7 @@ fun Tabs (pagerState: PagerState) {
             Tab(
                 text = {
                     Text(
-                        list.get(index),
+                        list[index],
                         color = Color.White
                     )
                 },
