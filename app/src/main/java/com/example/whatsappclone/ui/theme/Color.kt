@@ -9,3 +9,5 @@ val Teal200 = Color(0xFF03DAC5)
 
 val WhatsAppThemeColor = Color(0xFF075E54)
 val lightGrayColor = Color(0xFFF5F5F5)
+val WhatsAppActionBarColor = Color(0xFF128C7E)
+val WhatsAppFloatIconColor = Color(0xFF25D366)
