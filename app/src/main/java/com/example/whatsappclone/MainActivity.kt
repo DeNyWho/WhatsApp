@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -20,15 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.whatsappclone.ui.theme.WhatsAppCloneTheme
 import com.example.whatsappclone.ui.theme.WhatsAppFloatIconColor
 import com.example.whatsappclone.ui.theme.WhatsAppThemeColor
 import com.example.whatsappclone.utils.Constants._tabCurrentStatus
 import com.example.whatsappclone.utils.Constants.tabCurrentStatus
 import com.example.whatsappclone.view.WhatsAppCalls
+import com.example.whatsappclone.view.WhatsAppChatList
 import com.example.whatsappclone.view.WhatsAppChats
 import com.example.whatsappclone.view.WhatsAppStatus
 import com.google.accompanist.pager.*
@@ -43,7 +46,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    WhatsApp()
+                    val navController = rememberNavController()
+                    
+                    NavHost(
+                        navController = navController,
+                        startDestination = "whats_app_main"
+                    ) {
+                        composable("whats_app_main") { WhatsApp(navController)}
+                        composable("whats_app_chat") { WhatsAppChatList(navController)}
+                    }
+
                 }
             }
         }
@@ -51,7 +63,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun WhatsApp() {
+fun WhatsApp(navController: NavHostController) {
     val context = LocalContext.current
     val menuExpaned = remember { mutableStateOf(false)}
     val tabStatus = tabCurrentStatus.observeAsState()
@@ -154,7 +166,7 @@ fun WhatsApp() {
             topBar()
         },
         content = {
-            WhatsAppTab()
+            WhatsAppTab(navController)
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -194,19 +206,19 @@ fun WhatsApp() {
     )
 }
 
-@Preview
-@Composable
-fun WhatsAppPrev () {
-    WhatsApp ()
-}
+//@Preview
+//@Composable
+//fun WhatsAppPrev () {
+//    WhatsApp(navController)
+//}
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun WhatsAppTab () {
+fun WhatsAppTab(navController: NavHostController) {
     val pagerState = rememberPagerState(pageCount = 3)
     Column {
         Tabs (pagerState)
-        TabsContent (pagerState)
+        TabsContent (pagerState, navController)
     }
 }
 
@@ -250,10 +262,10 @@ fun Tabs (pagerState: PagerState) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabsContent(pagerState: PagerState) {
+fun TabsContent(pagerState: PagerState, navController: NavHostController) {
     HorizontalPager(state = pagerState) { page ->
         when(page) {
-            0 -> WhatsAppChats()
+            0 -> WhatsAppChats(navController)
             1 -> WhatsAppStatus()
             2 -> WhatsAppCalls()
         }
