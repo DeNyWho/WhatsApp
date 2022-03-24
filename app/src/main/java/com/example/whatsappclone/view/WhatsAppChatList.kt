@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -17,6 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -162,10 +169,106 @@ fun WhatsAppChatList(navController: NavHostController) {
             }
         },
         bottomBar = {
-            //BottomDesign()
+            BottomDesign()
         }
     )
 }
+
+@Composable
+fun BottomDesign() {
+    val textState = remember { mutableStateOf(TextFieldValue()) }
+
+    Row(
+        modifier = Modifier
+            .padding(5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .weight(0.85f)
+                .wrapContentSize()
+                .clip(RoundedCornerShape(30.dp))
+                .background(Color.White)
+                .padding(10.dp, 0.dp, 10.dp, 0.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_emoji),
+                contentDescription = "Emoji",
+                tint = Color.Gray,
+                modifier = Modifier.weight(0.1f)
+            )
+            TextField(
+                value = textState.value,
+                onValueChange = { textState.value = it },
+                placeholder = {
+                    Text(
+                        text = "Message",
+                        color = Color.Gray,
+                        fontSize = 15.sp
+                    )
+                },
+                modifier = Modifier
+                    .weight(0.66f)
+                    .wrapContentHeight(),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.None,
+                    keyboardType = KeyboardType.Text,
+                    autoCorrect = true,
+                    imeAction = ImeAction.Done
+                ),
+                textStyle = TextStyle(color = Color.Black,
+                    fontSize = 15.sp),
+                maxLines = 1,
+                singleLine = true,
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.Black,
+                    disabledTextColor = Color.Transparent,
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                )
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_attach),
+                contentDescription = "Attach",
+                tint = Color.Gray,
+                modifier = Modifier.weight(0.14f)
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_camera),
+                contentDescription = "Attach",
+                tint = Color.Gray,
+                modifier = Modifier.weight(0.1f)
+            )
+        }
+        Row(
+            modifier = Modifier.weight(0.15f),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            FloatingActionButton(
+                onClick = {  },
+                backgroundColor = WhatsAppThemeColor
+            ) {
+                Icon(
+                    painter = painterResource(
+                        if (textState.value.text.isEmpty()) {
+                            R.drawable.ic_voice_records
+                        } else {
+                            R.drawable.ic_baseline_send_24
+                        }
+                    ),
+                    contentDescription = "Text Icon",
+                    tint = Color.White,
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 fun ChatListItem(data: SampleData, index: Int) {

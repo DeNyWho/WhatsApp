@@ -127,8 +127,8 @@ fun WhatsAppCallList(data: SampleData, index: Int) {
                 ),
                 contentDescription = "Income & Outgoing call icons",
                 modifier = Modifier
-                    .width(20.dp)
-                    .height(20.dp)
+                    .width(28.dp)
+                    .height(28.dp)
                     .padding(0.dp, 0.dp, 3.dp, 0.dp)
             )
 
