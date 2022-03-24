@@ -101,40 +101,39 @@ fun WhatsAppChatList(navController: NavHostController) {
                         contentDescription = "",
                         tint = Color.White
                     )
-                }
-
-                Column(
-                    modifier = Modifier.wrapContentSize(Alignment.TopStart)
-                ) {
-                    DropdownMenu(
-                        expanded = menuExpanded.value,
-                        onDismissRequest = {
-                            menuExpanded.value = false
-                        },
-                        modifier = Modifier
-                            .width(200.dp)
-                            .wrapContentSize(Alignment.TopStart)
+                    Column(
+                        modifier = Modifier.wrapContentSize(Alignment.TopStart)
                     ) {
-                        DropdownMenuItem(onClick = {  }) {
-                            Text(text = "Add to contacts")
-                        }
-                        DropdownMenuItem(onClick = {  }) {
-                            Text(text = "Report")
-                        }
-                        DropdownMenuItem(onClick = {  }) {
-                            Text(text = "Block")
-                        }
-                        DropdownMenuItem(onClick = {  }) {
-                            Text(text = "Search")
-                        }
-                        DropdownMenuItem(onClick = {  }) {
-                            Text(text = "Mute notifications")
-                        }
-                        DropdownMenuItem(onClick = {  }) {
-                            Text(text = "Wallpaper")
-                        }
-                        DropdownMenuItem(onClick = {  }) {
-                            Text(text = "More")
+                        DropdownMenu(
+                            expanded = menuExpanded.value,
+                            onDismissRequest = {
+                                menuExpanded.value = false
+                            },
+                            modifier = Modifier
+                                .width(200.dp)
+                                .wrapContentSize(Alignment.TopStart)
+                        ) {
+                            DropdownMenuItem(onClick = {  }) {
+                                Text(text = "Add to contacts")
+                            }
+                            DropdownMenuItem(onClick = {  }) {
+                                Text(text = "Report")
+                            }
+                            DropdownMenuItem(onClick = {  }) {
+                                Text(text = "Block")
+                            }
+                            DropdownMenuItem(onClick = {  }) {
+                                Text(text = "Search")
+                            }
+                            DropdownMenuItem(onClick = {  }) {
+                                Text(text = "Mute notifications")
+                            }
+                            DropdownMenuItem(onClick = {  }) {
+                                Text(text = "Wallpaper")
+                            }
+                            DropdownMenuItem(onClick = {  }) {
+                                Text(text = "More")
+                            }
                         }
                     }
                 }
