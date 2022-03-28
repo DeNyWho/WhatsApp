@@ -11,15 +11,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,33 +28,23 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.whatsappclone.R
 import com.example.whatsappclone.model.SampleData
 import com.example.whatsappclone.ui.theme.WhatsAppChatBg
 import com.example.whatsappclone.ui.theme.WhatsAppOutgoingMsg
 import com.example.whatsappclone.ui.theme.WhatsAppThemeColor
+import com.example.whatsappclone.viewModel.WhatsAppChatViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun WhatsAppChatList(navController: NavHostController) {
-    val date = SimpleDateFormat("hh:mm a")
-    val strDate: String = date.format(Date())
     val menuExpanded = remember { mutableStateOf(false) }
-
-    val chatListItem = listOf(
-        SampleData("Name 1", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 2", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 3", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 4", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 5", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 6", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 7", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 8", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 9", "Hi, Welcome", "Sample Url", strDate),
-        SampleData("Name 10", "Hi, Welcome", "Sample Url", strDate)
-    )
+    val viewModel: WhatsAppChatViewModel = viewModel()
+    val getAllChat = viewModel.getSampleData.observeAsState(mutableListOf())
+    val flag = viewModel.flag.observeAsState()
 
     val topBar: @Composable () -> Unit = {
         TopAppBar(
@@ -82,6 +73,11 @@ fun WhatsAppChatList(navController: NavHostController) {
                             color = Color.White,
                             fontSize = 12.sp
                         )
+                        Text(
+                            text = "online",
+                            color = Color.White,
+                            fontSize = 12.sp
+                        )
                     }
                 }
             },
@@ -94,7 +90,7 @@ fun WhatsAppChatList(navController: NavHostController) {
                     )
                 }
                 IconButton(onClick = {
-                    menuExpanded.value = true
+
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_call_24),
@@ -102,45 +98,48 @@ fun WhatsAppChatList(navController: NavHostController) {
                         tint = Color.White
                     )
                 }
-                IconButton(onClick = {  }) {
+                IconButton(onClick = {
+                    menuExpanded.value = true
+                }) {
                     Icon(
                         Icons.Filled.MoreVert,
                         contentDescription = "",
                         tint = Color.White
                     )
-                    Column(
-                        modifier = Modifier.wrapContentSize(Alignment.TopStart)
+                }
+
+                Column(
+                    modifier = Modifier.wrapContentSize(Alignment.TopStart)
+                ) {
+                    DropdownMenu(
+                        expanded = menuExpanded.value,
+                        onDismissRequest = {
+                            menuExpanded.value = false
+                        },
+                        modifier = Modifier
+                            .width(200.dp)
+                            .wrapContentSize(Alignment.TopStart)
                     ) {
-                        DropdownMenu(
-                            expanded = menuExpanded.value,
-                            onDismissRequest = {
-                                menuExpanded.value = false
-                            },
-                            modifier = Modifier
-                                .width(200.dp)
-                                .wrapContentSize(Alignment.TopStart)
-                        ) {
-                            DropdownMenuItem(onClick = {  }) {
-                                Text(text = "Add to contacts")
-                            }
-                            DropdownMenuItem(onClick = {  }) {
-                                Text(text = "Report")
-                            }
-                            DropdownMenuItem(onClick = {  }) {
-                                Text(text = "Block")
-                            }
-                            DropdownMenuItem(onClick = {  }) {
-                                Text(text = "Search")
-                            }
-                            DropdownMenuItem(onClick = {  }) {
-                                Text(text = "Mute notifications")
-                            }
-                            DropdownMenuItem(onClick = {  }) {
-                                Text(text = "Wallpaper")
-                            }
-                            DropdownMenuItem(onClick = {  }) {
-                                Text(text = "More")
-                            }
+                        DropdownMenuItem(onClick = {  }) {
+                            Text(text = "Add to contacts")
+                        }
+                        DropdownMenuItem(onClick = {  }) {
+                            Text(text = "Report")
+                        }
+                        DropdownMenuItem(onClick = {  }) {
+                            Text(text = "Block")
+                        }
+                        DropdownMenuItem(onClick = {  }) {
+                            Text(text = "Search")
+                        }
+                        DropdownMenuItem(onClick = {  }) {
+                            Text(text = "Mute notifications")
+                        }
+                        DropdownMenuItem(onClick = {  }) {
+                            Text(text = "Wallpaper")
+                        }
+                        DropdownMenuItem(onClick = {  }) {
+                            Text(text = "More")
                         }
                     }
                 }
@@ -159,24 +158,56 @@ fun WhatsAppChatList(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .background(WhatsAppChatBg)
-                    .padding(10.dp)
+                    .padding(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                LazyColumn {
-                    items(chatListItem.size) { index ->
-                        ChatListItem(chatListItem[index], index)
-                    }
-                }
+                Text(text = "Today, ${flag.value}", textAlign = TextAlign.Center, fontSize = 12.sp)
+                Spacer(modifier = Modifier.padding(5.dp))
+                CallChatList(getAllChat.value)
             }
         },
         bottomBar = {
-            BottomDesign()
+            BottomDesign(viewModel)
         }
     )
 }
 
 @Composable
-fun BottomDesign() {
+fun CallChatList(value: List<SampleData>) {
+    val scaffoldState = rememberScaffoldState()
+    Surface {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            scaffoldState = scaffoldState
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(WhatsAppChatBg)
+            ) {
+                CallChatItem(value)
+            }
+        }
+    }
+}
+
+@Composable
+fun CallChatItem(value: List<SampleData>) {
+    LazyColumn {
+        items(
+            value.size
+        ) { index ->
+            ChatListItem(data = value[index], index = index)
+        }
+    }
+}
+
+@Composable
+fun BottomDesign(viewModel: WhatsAppChatViewModel) {
     val textState = remember { mutableStateOf(TextFieldValue()) }
+    val scope = rememberCoroutineScope()
+    val date = SimpleDateFormat("hh:mm a")
+    val strDate: String = date.format(Date())
 
     Row(
         modifier = Modifier
@@ -249,7 +280,17 @@ fun BottomDesign() {
             horizontalArrangement = Arrangement.Center
         ) {
             FloatingActionButton(
-                onClick = {  },
+                onClick = {
+                    if (textState.value.text.isNotEmpty()) {
+                        val sampleData = SampleData(
+                            "Name",
+                            textState.value.text,
+                            "Sample Url",
+                            strDate
+                        )
+                        viewModel.addChat(sampleData)
+                    }
+                },
                 backgroundColor = WhatsAppThemeColor
             ) {
                 Icon(
